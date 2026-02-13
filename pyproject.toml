@@ -1,0 +1,25 @@
+[build-system]
+requires = [
+	"flit_core >=3.2,<4",
+	"python_version >= '3.7'"
+	]
+build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+
+[project]
+name = "seqparser"
+authors = [{name = "Akshita Saxena", email = "akshita.saxena@ucsf.edu"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+dependencies = [
+    "pytest"
+]
+
+[project.urls]
+Home = "https://github.com/akshitasax/HW5-NW.git"

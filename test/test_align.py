@@ -14,7 +14,13 @@ def test_nw_alignment():
     """
     seq1, _ = read_fasta("./data/test_seq1.fa")
     seq2, _ = read_fasta("./data/test_seq2.fa")
-    pass
+
+    test_sub_file = 'substitution_matrices/BLOSUM62.mat'
+    sub_mat = NeedlemanWunsch(test_sub_file, gap_open = -10, gap_extend = -1)
+    score, seq1_alignment, seq2_alignment = sub_mat.align(seq1, seq2)
+
+    assert seq1_alignment == 'MYQR'
+    assert seq2_alignment == 'MQR'
     
 
 def test_nw_backtrace():

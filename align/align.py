@@ -100,8 +100,6 @@ class NeedlemanWunsch:
 
     def align(self, seqA: str, seqB: str) -> Tuple[float, str, str]:
         """
-        TODO
-        
         This function performs global sequence alignment of two strings
         using the Needleman-Wunsch Algorithm
         
@@ -115,6 +113,9 @@ class NeedlemanWunsch:
          	(alignment score, seqA alignment, seqB alignment) : Tuple[float, str, str]
          		the score and corresponding strings for the alignment of seqA and seqB
         """
+        
+        #obj = NeedlemanWunsch()
+
         # Resetting alignment in case method is called more than once
         self.seqA_align = ""
         self.seqB_align = ""
@@ -126,14 +127,50 @@ class NeedlemanWunsch:
         self._seqA = seqA
         self._seqB = seqB
         
-        # TODO: Initialize matrix private attributes for use in alignment
+        # Initialize matrix private attributes for use in alignment
         # create matrices for alignment scores, gaps, and backtracing
-        pass
-
+    
+        lenA = len(seqA)
+        lenB = len(seqB)
         
-        # TODO: Implement global alignment here
-        pass      		
-        		    
+        # Implement global alignment here
+        # we have seqA and seqB, start running NW
+
+        # Initialize scoring matrix with zeros
+        smat = np.zeros((lenA, lenB))
+        traceback = np.zeros((lenA, lenB)) # this way seq is horizontal 
+
+        # Initialize first column (vertical, gaps in seqB)
+        for i in range(lenA):
+            smat[i, 0] = i * self.gap_open
+            traceback[i, 0] = 'up'
+
+        # Initialize first row (horizontal, gaps in seqA)
+        for j in range(lenB):
+            smat[0, j] = j * self.gap_open
+            traceback[i, 0] = 'left'
+
+        # now we start filling in the mat
+        for i in range(1, lenA+1):
+            for j in range(1, lenB+1):
+                A_dash = smat[i, j-1] + self.gap_open
+                dash_B = smat[i-1, j] + self.gap_open
+                AB = smat[i-1, j-1] + self.sub_dict[(seqA[j-1], seqB[i-1])]
+
+                entry = np.max([dash_B, A_dash, AB])
+
+                smat[i,j] = entry
+
+                if entry == A_dash:
+                    traceback[i,j] = 'up'
+                elif entry == dash_B:
+                    traceback[i,j] = 'left'
+                else:
+                    traceback[i,j] = 'diag'
+
+        self.traceback_mat = traceback
+        self.scoring_mat = smat
+
         return self._backtrace()
 
     def _backtrace(self) -> Tuple[float, str, str]:
@@ -150,7 +187,36 @@ class NeedlemanWunsch:
          	(alignment score, seqA alignment, seqB alignment) : Tuple[float, str, str]
          		the score and corresponding strings for the alignment of seqA and seqB
         """
-        pass
+
+        traceback = self.traceback_mat
+
+        seqA_align_rev = ""
+        seqB_align_rev = ""
+      
+        seqA = self._seqA
+        seqB = self._seqB
+
+        i = len(self._seqA)
+        j = len(self._seqB)
+
+        while i > 0 or j > 0:
+            if traceback[i,j] == 'diag':
+                seqA_align_rev += seqA[i-1]
+                seqB_align_rev += seqB[j-1]
+                i -= 1
+                j -= 1
+            elif traceback[i,j] == 'up': # prev element from A, and dash for B
+                seqA_align_rev += seqA[i-1]
+                seqB_align_rev += '-'
+                i -= 1
+            else: # prev element from B and dash for A
+                seqA_align_rev += '-'
+                seqB_align_rev += seqB[j-1]
+                j -= 1
+        
+        self.seqA_align = seqA_align_rev[::-1]
+        self.seqB_align = seqB_align_rev[::-1]
+        self.alignment_score = self.scoring_mat[i, j]
 
         return (self.alignment_score, self.seqA_align, self.seqB_align)
 
