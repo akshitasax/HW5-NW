@@ -138,7 +138,7 @@ class NeedlemanWunsch:
 
         # Initialize scoring matrix with zeros
         smat = np.zeros((lenA, lenB))
-        traceback = np.zeros((lenA, lenB)) # this way seq is horizontal 
+        traceback = np.zeros((lenA, lenB), dtype=str) # this way seq is horizontal 
 
         # Initialize first column (vertical, gaps in seqB)
         for i in range(lenA):
