@@ -171,6 +171,8 @@ class NeedlemanWunsch:
         self.traceback_mat = traceback
         self.scoring_mat = smat
 
+        print(smat)
+
         return self._backtrace()
 
     def _backtrace(self) -> Tuple[float, str, str]:
@@ -202,6 +204,8 @@ class NeedlemanWunsch:
         while i > 0 or j > 0:
             print('index i: ' + str(i))
             print('index j: ' + str(j))
+
+            print(traceback[i,j])
 
             if traceback[i,j] == 'diag':
                 seqA_align_rev += seqA[i-1]
