@@ -170,6 +170,8 @@ class NeedlemanWunsch:
 
         self.traceback_mat = traceback
         self.scoring_mat = smat
+        print(smat)
+        print(traceback)
 
         return self._backtrace()
 
