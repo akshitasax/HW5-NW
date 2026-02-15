@@ -141,12 +141,12 @@ class NeedlemanWunsch:
         traceback = np.zeros((lenA+1, lenB+1), dtype=str) # seqB is horizontal, seqA is vertical
 
         # Initialize first column (vertical, gaps in seqB)
-        for i in range(lenA):
+        for i in range(lenA+1):
             smat[i, 0] = i * self.gap_open
             traceback[i, 0] = 'u'
 
         # Initialize first row (horizontal, gaps in seqA)
-        for j in range(lenB):
+        for j in range(lenB+1):
             smat[0, j] = j * self.gap_open
             traceback[i, 0] = 'l'
 
