@@ -138,17 +138,17 @@ class NeedlemanWunsch:
 
         # Initialize scoring matrix with zeros
         smat = np.zeros((lenA+1, lenB+1))
-        traceback = np.zeros((lenA+1, lenB+1), dtype=str) # this way seq is horizontal 
+        traceback = np.zeros((lenA+1, lenB+1), dtype=str) # seqB is horizontal, seqA is vertical
 
         # Initialize first column (vertical, gaps in seqB)
         for i in range(lenA):
             smat[i, 0] = i * self.gap_open
-            traceback[i, 0] = 'up'
+            traceback[i, 0] = 'u'
 
         # Initialize first row (horizontal, gaps in seqA)
         for j in range(lenB):
             smat[0, j] = j * self.gap_open
-            traceback[i, 0] = 'left'
+            traceback[i, 0] = 'l'
 
         # now we start filling in the mat
         for i in range(1, lenA+1):
@@ -162,11 +162,11 @@ class NeedlemanWunsch:
                 smat[i,j] = entry
 
                 if entry == A_dash:
-                    traceback[i,j] = 'up'
+                    traceback[i,j] = 'u'
                 elif entry == dash_B:
-                    traceback[i,j] = 'left'
+                    traceback[i,j] = 'l'
                 else:
-                    traceback[i,j] = 'diag'
+                    traceback[i,j] = 'd'
 
         self.traceback_mat = traceback
         self.scoring_mat = smat
@@ -207,12 +207,12 @@ class NeedlemanWunsch:
 
             print(traceback[i,j])
 
-            if traceback[i,j] == 'diag':
+            if traceback[i,j] == 'd':
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += seqB[j-1]
                 i -= 1
                 j -= 1
-            elif traceback[i,j] == 'up': # prev element from A, and dash for B
+            elif traceback[i,j] == 'u': # prev element from A, and dash for B
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += '-'
                 i -= 1
