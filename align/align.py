@@ -148,7 +148,7 @@ class NeedlemanWunsch:
         # Initialize first row (horizontal, gaps in seqA)
         for j in range(lenB+1):
             smat[0, j] = j * self.gap_open
-            traceback[i, 0] = 'l'
+            traceback[0, j] = 'l'
 
         # now we start filling in the mat
         for i in range(1, lenA+1):
@@ -222,7 +222,8 @@ class NeedlemanWunsch:
         self.seqB_align = seqB_align_rev[::-1]
         print(self.seqB_align)
        
-        self.alignment_score = self.scoring_mat[i, j]
+        self.alignment_score = self.scoring_mat[-1,-1]
+        
         print(self.alignment_score)
 
         return (self.alignment_score, self.seqA_align, self.seqB_align)
