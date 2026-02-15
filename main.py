@@ -16,7 +16,7 @@ def main():
     # Align all species to humans and print species in order of most similar to human BRD
     # using gap opening penalty of -10 and a gap extension penalty of -1 and BLOSUM62 matrix
     sub_file = 'substitution_matrices/BLOSUM62.mat'
-    sub_mat = NeedlemanWunsch(sub_file, gap_open=-10, gap_extend=-1)
+    sub_mat = NeedlemanWunsch(sub_file, gap_open=-4, gap_extend=-1)
 
     species_seqs = [gg_seq, mm_seq, br_seq, tt_seq]
     species_headers = [gg_header, mm_header, br_header, tt_header]
