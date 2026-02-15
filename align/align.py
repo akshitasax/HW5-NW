@@ -200,6 +200,9 @@ class NeedlemanWunsch:
         j = len(self._seqB)
 
         while i > 0 or j > 0:
+            print('index i: ' + str(i))
+            print('index j: ' + str(j))
+
             if traceback[i,j] == 'diag':
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += seqB[j-1]
