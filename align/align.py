@@ -208,7 +208,7 @@ class NeedlemanWunsch:
                 seqB_align_rev += seqB[j-1]
                 i -= 1
                 j -= 1
-            elif traceback[i,j] == 'u': # prev element from A, and dash for B
+            elif traceback[i,j] == 'l': # prev element from A, and dash for B
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += '-'
                 i -= 1
