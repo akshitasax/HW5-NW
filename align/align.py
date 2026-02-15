@@ -155,7 +155,7 @@ class NeedlemanWunsch:
             for j in range(1, lenB+1):
                 A_dash = smat[i, j-1] + self.gap_open
                 dash_B = smat[i-1, j] + self.gap_open
-                AB = smat[i-1, j-1] + self.sub_dict[(seqA[j-1], seqB[i-1])]
+                AB = smat[i-1, j-1] + self.sub_dict[(seqA[i-1], seqB[j-1])]
 
                 entry = np.max([dash_B, A_dash, AB])
 
