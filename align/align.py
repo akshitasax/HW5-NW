@@ -29,13 +29,9 @@ class NeedlemanWunsch:
     def __init__(self, sub_matrix_file: str, gap_open: float, gap_extend: float):
         # Init alignment and gap matrices
         self._align_matrix = None
-        self._gapA_matrix = None
-        self._gapB_matrix = None
 
         # Init matrices for backtrace procedure
         self._back = None
-        self._back_A = None
-        self._back_B = None
 
         # Init alignment_score
         self.alignment_score = 0
@@ -113,9 +109,7 @@ class NeedlemanWunsch:
          	(alignment score, seqA alignment, seqB alignment) : Tuple[float, str, str]
          		the score and corresponding strings for the alignment of seqA and seqB
         """
-        
-        #obj = NeedlemanWunsch()
-
+    
         # Resetting alignment in case method is called more than once
         self.seqA_align = ""
         self.seqB_align = ""
@@ -136,14 +130,14 @@ class NeedlemanWunsch:
         # Implement global alignment here
         # we have seqA and seqB, start running NW
 
-        # Initialize scoring matrix with zeros
+        # Initialize scoring matrix and traceback matrix with zeros
         smat = np.zeros((lenA+1, lenB+1))
         traceback = np.zeros((lenA+1, lenB+1), dtype=str) # seqB is horizontal, seqA is vertical
 
         # Initialize first column (vertical, gaps in seqB)
         for i in range(lenA+1):
             smat[i, 0] = i * self.gap_open
-            traceback[i, 0] = 'u'
+            traceback[i, 0] = 'u' 
 
         # Initialize first row (horizontal, gaps in seqA)
         for j in range(lenB+1):
@@ -153,16 +147,18 @@ class NeedlemanWunsch:
         # now we start filling in the mat
         for i in range(1, lenA+1):
             for j in range(1, lenB+1):
+                # compute the 3 possible scores
                 A_dash = smat[i, j-1] + self.gap_open
                 dash_B = smat[i-1, j] + self.gap_open
                 AB = smat[i-1, j-1] + self.sub_dict[(seqA[i-1], seqB[j-1])]
 
-                entry = np.max([dash_B, A_dash, AB])
+                entry = np.max([dash_B, A_dash, AB]) # assign largest one to scoring matrix
 
                 smat[i,j] = entry
 
+                # save info about which score was chosen, and put direction of movement in traceback matrix
                 if entry == A_dash:
-                    traceback[i,j] = 'u'
+                    traceback[i,j] = 'u' 
                 elif entry == dash_B:
                     traceback[i,j] = 'l'
                 else:
@@ -190,34 +186,43 @@ class NeedlemanWunsch:
 
         traceback = self.traceback_mat
 
+        # initialize reversed alignment sequences
         seqA_align_rev = ""
         seqB_align_rev = ""
       
+        # assign sequence attributes to a variable
         seqA = self._seqA
         seqB = self._seqB
 
+        # i and j are lengths of sequences
         i = len(self._seqA)
         j = len(self._seqB)
 
+
         while i > 0 or j > 0:
 
+            # if diag, save char from both sequences
             if traceback[i,j] == 'd':
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += seqB[j-1]
                 i -= 1
                 j -= 1
-            elif traceback[i,j] == 'l': # prev element from A, and dash for B
+            # if l, only save char from vertical sequence (A) and dash for B
+            elif traceback[i,j] == 'l':
                 seqA_align_rev += seqA[i-1]
                 seqB_align_rev += '-'
                 i -= 1
-            else: # prev element from B and dash for A
+            # if u, only save char from horizontal sequence (B) and dash for A
+            else:
                 seqA_align_rev += '-'
                 seqB_align_rev += seqB[j-1]
                 j -= 1
         
+        # reverse to get normal alignment
         self.seqA_align = seqA_align_rev[::-1]
         self.seqB_align = seqB_align_rev[::-1]
        
+       # get score, last element in 2D array
         self.alignment_score = self.scoring_mat[-1,-1]
         
         return (self.alignment_score, self.seqA_align, self.seqB_align)
