@@ -38,9 +38,11 @@ def test_nw_backtrace():
     sub_mat = NeedlemanWunsch(test_sub_file, gap_open = -4, gap_extend = -1)
     score, seq1_alignment, seq2_alignment = sub_mat.align(seq3, seq4)
 
-    # assert seq1_alignment == 'MAVHQLIRRP'
-    # assert seq2_alignment == 'M---QLIRHP'
+    assert seq1_alignment == 'MAVHQLIRRP'
+    assert seq2_alignment == 'M---QLIRHP'
     assert score == 18
+
+
 
 
 

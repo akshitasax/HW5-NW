@@ -170,8 +170,6 @@ class NeedlemanWunsch:
 
         self.traceback_mat = traceback
         self.scoring_mat = smat
-        print(smat)
-        print(traceback)
 
         return self._backtrace()
 
@@ -218,14 +216,10 @@ class NeedlemanWunsch:
                 j -= 1
         
         self.seqA_align = seqA_align_rev[::-1]
-        print(self.seqA_align)
         self.seqB_align = seqB_align_rev[::-1]
-        print(self.seqB_align)
        
         self.alignment_score = self.scoring_mat[-1,-1]
         
-        print(self.alignment_score)
-
         return (self.alignment_score, self.seqA_align, self.seqB_align)
 
 

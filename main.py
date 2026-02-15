@@ -11,7 +11,7 @@ def main():
     gg_seq, gg_header = read_fasta("./data/Gallus_gallus_BRD2.fa")
     mm_seq, mm_header = read_fasta("./data/Mus_musculus_BRD2.fa")
     br_seq, br_header = read_fasta("./data/Balaeniceps_rex_BRD2.fa")
-    tt_seq, tt_header = read_fasta("./data/tursiops_truncatus_BRD2.fa")
+    tt_seq, tt_header = read_fasta("./data/Tursiops_truncatus_BRD2.fa")
 
     # Align all species to humans and print species in order of most similar to human BRD
     # using gap opening penalty of -10 and a gap extension penalty of -1 and BLOSUM62 matrix
@@ -33,10 +33,6 @@ def main():
     print('Species similarity to human BRD2 (most to least similar):')
     for (header, score, _, _) in alignments_sorted:
         print(f"{header}: {score}")
-
-
-        
-
 
     # TODO print all of the alignment score between each species BRD2 and human BRD2
     # using gap opening penalty of -10 and a gap extension penalty of -1 and BLOSUM62 matrix    
